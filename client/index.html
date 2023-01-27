@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <title>Chat</title>
+</head>
+<body class="bg-slate-200 flex justify-center align-center w-screen h-screen" x-data="{ openChat: false }">
+    <section x-show="!openChat" class="rounded-lg shadow flex flex-col gap-6 p-4 bg-white w-2/5 my-auto">
+        <h1 class="text-2xl">Bem vindo, insira seu nome para continuar</h1>
+        <div class="flex">
+            <input type="text" name="name" id="name" class="bg-slate-100 p-2 w-full"/>
+            <button class="bg-slate-800 p-2 rounded text-white w-24" @click="openChat = true; handleClickNameConfirm" >Confirmar</button>
+        </div>
+    </section>
+    <section x-show="openChat" class="rounded-lg shadow flex flex-col p-4 bg-white w-2/5 h-3/5 my-auto">
+        <div class="h-full w-full flex flex-col gap-2 overflow-y-scroll" id="messageBox">
+            <p>Arthur: teste</p>
+        </div>
+        <div class="flex">
+            <input type="text" name="message" id="message" class="bg-slate-100 p-2 w-full"/>
+            <button class="bg-slate-800 p-2 rounded text-white w-16">Send</button>
+        </div>
+    </section>
+
+    <script>
+        var name = ""
+        var message = ""
+
+        function handleClickNameConfirm() {
+            name = document.querySelector('#name')
+        }
+
+        console.log(name)
+    </script>
+</body>
+</html>
