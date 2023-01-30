@@ -13,7 +13,7 @@
         <h1 class="text-2xl">Bem vindo, insira seu nome para continuar</h1>
         <div class="flex">
             <input type="text" name="name" id="name" class="bg-slate-100 p-2 w-full"/>
-            <button class="bg-slate-800 p-2 rounded text-white w-24" @click="openChat = true; handleClickNameConfirm" >Confirmar</button>
+            <button class="bg-slate-800 p-2 rounded text-white w-24" @click="handleClickNameConfirm" >Confirmar</button>
         </div>
     </section>
     <section x-show="openChat" class="rounded-lg shadow flex flex-col p-4 bg-white w-2/5 h-3/5 my-auto">
@@ -22,19 +22,38 @@
         </div>
         <div class="flex">
             <input type="text" name="message" id="message" class="bg-slate-100 p-2 w-full"/>
-            <button class="bg-slate-800 p-2 rounded text-white w-16">Send</button>
+            <button class="bg-slate-800 p-2 rounded text-white w-16" @click="handleClickSend">Send</button>
         </div>
     </section>
 
     <script>
         var name = ""
-        var message = ""
+        const socket = new WebSocket("ws://localhost:8003");
 
-        function handleClickNameConfirm() {
-            name = document.querySelector('#name')
+        socket.onmessage = (event) => handleSocketMessage(event)
+        socket.onclose = (event) => sendMessage(`${name} saiu sala`)
+
+        function handleSocketMessage(event) {
+            const messagesDiv = document.querySelector("#messageBox")
+            messagesDiv.innerHTML = messagesDiv.innerHTML + `<p>${event.data}</p>`
         }
 
-        console.log(name)
+        function handleClickNameConfirm() {
+            name = document.querySelector('#name').value
+            if (name == null || name == undefined) return
+            this.openChat = true
+            sendMessage(`${name} entrou na sala`)
+        }
+
+        function handleClickSend() {
+            const message = document.querySelector("#message").value
+            sendMessage(`${name}: ${message}`)
+        }
+
+        function sendMessage(message) {
+            socket.send(message)
+        }
+
     </script>
 </body>
 </html>
